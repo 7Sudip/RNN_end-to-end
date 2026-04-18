@@ -13,14 +13,13 @@ from model import build_model
 # Config
 MAX_LEN = 250
 MAX_DIM_INPUT = 10000 # VOCAB_SIZE
+
+# Where to save 
 MODEL_PATH = "models/vs_code_train_rnn_model.h5"
 TOKENIZER_PATH = "models/vs_code_train_tokenizer.pickle"
 
 # Load data
 df = pd.read_csv("data/raw/IMDB Dataset.csv")
-
-# For testing 
-df = df.sample(5000) 
 
 texts = df["review"].astype(str)
 labels = df["sentiment"]
@@ -65,7 +64,7 @@ early_stop = EarlyStopping(
 # Train
 model.fit(
     X_train, y_train,
-    epochs=5,
+    epochs=100,
     batch_size=64,       # How many reviews the model looks at before updating weights
     validation_data=(X_test, y_test),
     callbacks=[early_stop]
