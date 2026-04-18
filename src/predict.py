@@ -2,6 +2,8 @@ from tensorflow.keras.models import load_model
 from preprocess import preprocess_text,text_to_sequence
 from config import MODEL_PATH 
 
+import streamlit as st
+
 # Load model 
 model = load_model(MODEL_PATH)
 

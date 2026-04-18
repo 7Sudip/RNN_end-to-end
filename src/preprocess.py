@@ -5,7 +5,9 @@ import nltk
 from nltk.corpus import stopwords, wordnet
 from nltk.stem import WordNetLemmatizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
-from config import MAX_LEN
+from src.config import MAX_LEN,TOKENIZER_PATH
+
+import streamlit as st
 
 # Setup resources
 nltk.download('punkt',quiet=True)
@@ -14,10 +16,14 @@ nltk.download('stopwords',quiet=True)
 nltk.download('wordnet',quiet=True)
 
 # Load tokenizer
-with open('models/tokenizer.pickle', 'rb') as handle:
-    tokenizer = pickle.load(handle)
+@st.cache_resource # For fast in Streamlit UI
+def load_tokenizer():
+    with open(TOKENIZER_PATH, "rb") as handle:
+        tokenizer = pickle.load(handle)
+    return tokenizer
 
-MAX_LEN = MAX_LEN # 250 
+tokenizer = load_tokenizer() 
+
 
 exclude = string.punctuation
 lemmatizer = WordNetLemmatizer()
@@ -109,5 +115,3 @@ def text_to_sequence(input_text):
     sequence = tokenizer.texts_to_sequences([processed_text])
     padded = pad_sequences(sequence, maxlen=MAX_LEN)
     return padded 
-
-print(text_to_sequence('i will slap you.'))
